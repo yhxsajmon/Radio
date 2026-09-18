@@ -32,7 +32,5 @@ void app_main(void)
     oled_init(i2cHandler);
 
     // Ciclo infinito pulito con pausa per far respirare la CPU e rispettare il Watchdog
-    while(true){
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
+    
 }
