@@ -8,6 +8,7 @@ void powerOnSequence();
 
 static i2c_master_dev_handle_t oled_handler = NULL;
 
+
 /**
  * @brief Inizializes the I2C connection
  * 
@@ -105,5 +106,4 @@ void blankScreen(){
         ESP_ERROR_CHECK(i2c_master_transmit(oled_handler, empty, 1026, DEFAULT_TIMEOUT));
         free(empty);
     }
-
 }
