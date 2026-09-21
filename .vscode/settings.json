@@ -33,5 +33,5 @@
     "--query-driver=**",
     "--compile-commands-dir=/home/sajmon/Projects/Radio/build"
   ],
-  "idf.flashType": "JTAG"
+  "idf.flashType": "UART"
 }

@@ -1,12 +1,46 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include "screen.h"
+#include "font.h"
+#include <string.h>
 
 void chessboard();
 void reverseChessboard();
 void powerOnSequence();
 
+
 static i2c_master_dev_handle_t oled_handler = NULL;
+
+
+/**
+ * @brief Funzione di scrittura su riga
+ * @ return NULL
+ * @note TODO: Switch to dynamic memory allocation, and add a row system to write on each Page
+*/ 
+void printString(char text[]){
+  //Dimensione temporanea del buffer
+    uint8_t package[1024] = { 0x40 };
+    int endPointer = 1;
+    uint8_t buffer[5];
+  //Costruzione del pacchetto 
+    for(size_t i = 0; i < strlen(text); i++){
+    //Estrazione del carattere
+        if(text[i] > 31 && text[i] < 128){
+        for(size_t j = 0;j < 5;j++){
+            buffer[j] = font[text[i] - 32][j];
+        }
+        
+      //Aggiunta del buffer sull'array 
+        for(size_t k = endPointer; k < endPointer + 5; k++){
+            package[k] = buffer[k - endPointer];
+        }
+      //sistemare posizioen endPointer
+        endPointer = endPointer +5; 
+        }
+    }  
+    ESP_ERROR_CHECK(i2c_master_transmit(oled_handler,package,sizeof(package),DEFAULT_TIMEOUT));
+}
+
 
 
 /**

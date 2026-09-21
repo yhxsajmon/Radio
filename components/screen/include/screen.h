@@ -10,3 +10,4 @@
 
 void oled_init(i2c_master_bus_handle_t master_handler);
 void blankScreen();
+void printString(char text[]);
