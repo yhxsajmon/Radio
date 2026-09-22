@@ -7,8 +7,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
-#define SDA_PIN GPIO_NUM_6
-#define SCL_PIN GPIO_NUM_5
+
 
 
 void app_main(void)

@@ -4,6 +4,8 @@
 #include "font.h"
 #include <string.h>
 
+
+
 void chessboard();
 void reverseChessboard();
 void powerOnSequence();
