@@ -12,6 +12,23 @@ void powerOnSequence();
 static i2c_master_dev_handle_t oled_handler = NULL;
 
 
+i2c_master_bus_handle_t create_i2c_bus(){
+    i2c_master_bus_config_t i2c_config = {
+        .clk_source = I2C_CLK_SRC_DEFAULT,
+        .i2c_port = -1,
+        .scl_io_num = SCL_PIN,
+        .sda_io_num = SDA_PIN,
+        .glitch_ignore_cnt = 7,
+        .flags.enable_internal_pullup = true,
+    };
+
+    i2c_master_bus_handle_t busHandler;
+    ESP_ERROR_CHECK(i2c_new_master_bus(&i2c_config, &busHandler));
+
+    return busHandler;
+}
+
+
 /**
  * @brief Funzione di scrittura su riga
  * @ return NULL
@@ -19,7 +36,7 @@ static i2c_master_dev_handle_t oled_handler = NULL;
 */ 
 void printString(char text[]){
   //Dimensione temporanea del buffer
-    uint8_t package[1024] = { 0x40 };
+    uint8_t package[1024] = { SEND_DATA_FLAG };
     int endPointer = 1;
     uint8_t buffer[5];
   //Costruzione del pacchetto 
@@ -69,7 +86,7 @@ void powerOnSequence(){
         0x00,       
         0xA8, 0x3F, 
         0xD3, 0x00,
-        0x40,      
+        SEND_DATA_FLAG,      
         0xA1,      
         0xC8,       
         0x81, 0x7F, 
@@ -84,7 +101,6 @@ void powerOnSequence(){
 
     blankScreen();
     vTaskDelay(DEFAULT_TIMEOUT);
-    chessboard();
 }
 
 
@@ -98,7 +114,7 @@ void chessboard() {
     uint8_t* checkboardArray = malloc(sizeof(uint8_t) * 1025);
 
     if (checkboardArray != NULL) {
-        checkboardArray[0] = 0x40; // Byte di controllo per i dati (Co=0, D/C=1)
+        checkboardArray[0] = SEND_DATA_FLAG; // Byte di controllo per i dati (Co=0, D/C=1)
 
         // Iteriamo sulle 8 "pagine" orizzontali (ogni pagina è alta 8 pixel)
         for (size_t page = 0; page < 8; page++) {
@@ -130,7 +146,7 @@ void blankScreen(){
     uint8_t* empty = malloc(sizeof(uint8_t)*1026);
     uint8_t horizontal[] = {0x00 ,0x20, 0x00};
     if(empty!= NULL){
-        empty[0] = 0x40;
+        empty[0] = SEND_DATA_FLAG;
         
         for(size_t i=1;i<1026;i++){
             empty[i] = 0x00;
