@@ -14,7 +14,6 @@ void app_main(void)
 {
     i2c_master_bus_handle_t i2cHandler = create_i2c_bus();
     oled_init(i2cHandler);
-    printString("");
+    printString("Luca simone");
     // Ciclo infinito pulito con pausa per far respirare la CPU e rispettare il Watchdog
-    
 }
